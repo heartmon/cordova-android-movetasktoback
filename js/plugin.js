@@ -2,34 +2,29 @@
 
 var exec = require('cordova/exec'),
     argscheck = require('cordova/argscheck'),
-    tsd = require('cordova-android-movetasktoback.tsd'),
     cordova = require('cordova');
 
 var SERVICE_NAME = 'MoveTaskToBack';
 
 function executeForDeferred(method, args) {
-    var deferred = tsd.create();
-
-    exec(
-        function(result) {
-            deferred.resolve(result);
-        },
-        function(reason) {
-            deferred.reject(reason);
-        },
-        SERVICE_NAME, method, args
-    );
-
-    return deferred.promise;
+    return new Promise((resolve, reject) => {
+        exec(
+            function(result) {
+                resolve(result);
+            },
+            function(reason) {
+                reject(reason);
+            },
+            SERVICE_NAME, method, args
+        );
+    });
 }
 
 function moveTaskToBack() {
     argscheck.checkArgs('', SERVICE_NAME + ' moveTaskToBack', arguments);
 
-    if (cordova.platformId.toLowerCase() != 'android') {
-        return tsd.create()
-            .reject('not supported on platform ' + cordova.platformId)
-            .promise;
+    if (cordova.platformId.toLowerCase() !== 'android') {
+        return Promise.reject('not supported on platform ' + cordova.platformId);
     }
 
     return executeForDeferred('moveTaskToBack', []);

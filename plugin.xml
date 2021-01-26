@@ -22,9 +22,8 @@
 
     <author>Christian Speckner</author>
 
-    <js-module src="js/typescript_deferred.js" name="tsd"/>
     <js-module src="js/plugin.js">
-        <clobbers target="mayflower"/>
+        <clobbers target="cordova.plugins.moveTaskToBack"/>
     </js-module>
 
     <platform name="android">
